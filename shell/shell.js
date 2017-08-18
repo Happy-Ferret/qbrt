@@ -105,6 +105,8 @@ const UI = {
 
     browser.loadURI(url, null, null);
 
+    document.getElementById("optionspane").openPopup();
+
     // Dump instead of log to write to stdout for tests.
     dump(`opened ${url} in new window\n`);
 
