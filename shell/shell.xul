@@ -32,9 +32,11 @@
        titlebar="none"
        type="content"
        backdrag="true">
-       <box>
-        <label flex="0" id="titleText" class="frameButton" value="titlebar"/>
-</box>
+       <hbox class="surface-controls-container" id="titleText">
+         <label flex="0" class="frameButton window-control" onmousedown='return false;' onclick="closeModeless('optionspane');"/>
+         <label flex="0" class="frameButton window-control close" onmousedown='return false;' onclick="closeApp();"/>
+         <label flex="0" value="Anima Media Player"/>
+       </hbox>
        <browser id="content" type="content-primary" flex="2" />
 </panel>
 

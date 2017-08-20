@@ -162,5 +162,49 @@ const UI = {
   },
 };
 
+function closeModeless(ID) {
+  var modeless = document.getElementById(ID);
+  
+  modeless.classList.add("hoverOut");
+  
+  //Timeout in order to show closing animation.
+  setTimeout(function(){
+  modeless.hidePopup();
+  window.minimize();
+  },1000)
+}
+
+function closeApp() {
+  window.close();
+}
+
+function openModeless(ID) {
+  let windowX = screen.width * 10;
+  let windowY = screen.height;
+  var modeless = document.getElementById(ID);
+  
+  //Opening the panel with a slight delay, to make sure the underlying window is properly set up before.
+  setTimeout(function(){modeless.openPopupAtScreen(windowX, windowY / 100, true);}, 100);
+  document.getElementById("titleText").value = window.name.slice(0, -6);
+  document.title = window.name.slice(0, -6);
+}
+
+function restore(ID) {
+  var modeless = document.getElementById(ID);
+  
+  // Restore panel.
+  if (window.windowState === 3) {
+    openModeless(ID);
+    modeless.classList.remove("hoverOut");
+  }
+  // If window was minimised, hide popup so it can be restored later on.
+  else if (window.windowState === 2)
+  {
+    document.getElementById(ID).hidePopup();
+  }
+}
+
 window.addEventListener('load', UI.init.bind(UI), { once: true });
 window.addEventListener('unload', UI.destroy.bind(UI), { once: true });
+window.addEventListener("sizemodechange", function(event) { restore('optionspane') }, true);
+

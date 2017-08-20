@@ -9,3 +9,52 @@ background-color: rgba(0,0,0,0.8);
 -moz-appearance: none;
 transition: all 2s;
 }
+
+/* Minimize animation */
+.hoverOut {
+transform: scale(.1) rotateY(360deg);
+}
+
+.window-control {
+  margin: 0 1px;
+  width: 15px;
+  height: 15px;
+  border: 1px solid hsla(0,0%,0%,.2);
+  background-image: linear-gradient(#fff, #5d5c58);
+  background-clip: padding-box;
+  border-radius: 100%;
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.2) inset;
+}
+
+.window-control:hover {
+  background-image: linear-gradient(#c7c7c7, #9e9e9e);
+}
+
+.window-control:hover:active {
+  background-image: linear-gradient(#74736c, #77766f);
+  box-shadow: 0 1px 0 hsla(0,0%,0%,.2) inset;
+}
+
+.window-control > .icon {
+  width: 7px;
+  height: 7px;
+}
+
+.window-control.close {
+  background-image: linear-gradient(#ffffff, #da4e1d);
+}
+.window-control.close:hover {
+  background-image: linear-gradient(#f99f85, #e55726);
+}
+.window-control.close:hover:active {
+  background-image: linear-gradient(#e86b41, #ec6e44);
+}
+
+.surface-controls-container {
+  display: flex;
+  align-items: center;
+  z-index: 999;
+  transition-duration: 250ms;
+  transition-timing-function: var(--animation-curve);
+  color: white;
+}
