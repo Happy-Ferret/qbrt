@@ -1,4 +1,10 @@
 {
   "name": "shell",
-  "main": "main.js"
+  "main": "main.js",
+  "runtime": {
+    "prefs": {
+      "runtime-prefs-test.enabled": true,
+      "full-screen-api.enabled": true
+    }
+  }
 }

@@ -16,7 +16,12 @@
 
 const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
 const { Services } = Cu.import('resource://gre/modules/Services.jsm', {});
+const { NetUtil } = Cu.import('resource://gre/modules/NetUtil.jsm', {});
 const ChromeRegistry = Cc['@mozilla.org/chrome/chrome-registry;1'].getService(Ci.nsIXULChromeRegistry);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Preferences",
+  "resource://gre/modules/Preferences.jsm");
+
 
 this.EXPORTED_SYMBOLS = ['Runtime'];
 
@@ -33,6 +38,7 @@ this.Runtime = {
     // manifest, or make the caller specify the app directory in addition to
     // the app file.
     registerChromePrefix(appFile.parent);
+    setRuntimePrefs();
 
     const systemPrincipal = Cc['@mozilla.org/systemprincipal;1'].createInstance(Ci.nsIPrincipal);
 
@@ -178,3 +184,36 @@ function registerChromePrefix(appDir) {
 // function getOuterWindowID(window) {
 //   return window.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils).outerWindowID;
 // }
+
+
+
+function setRuntimePrefs() {
+  let packageJSON = JSON.parse(readFile("chrome://app/content/package.json"));
+  const PREF_BRANCH = "";
+
+  let branch = Services.prefs.getDefaultBranch(PREF_BRANCH);
+  for (var val in packageJSON.runtime.prefs) {
+    switch (typeof packageJSON.runtime.prefs[val]) {
+      case "boolean":
+        branch.setBoolPref(val, packageJSON.runtime.prefs[val]);
+        break;
+      case "number":
+        branch.setIntPref(val, packageJSON.runtime.prefs[val]);
+        break;
+      case "string":
+        branch.setCharPref(val, packageJSON.runtime.prefs[val]);
+        break;
+    }
+  }
+}
+
+function readFile(file) {
+  let stream = NetUtil.newChannel({
+    uri: file,
+    loadUsingSystemPrincipal: true,
+  }).open2();
+  let count = stream.available();
+  let data = NetUtil.readInputStreamToString(stream, count);
+  stream.close();
+  return data;
+}
